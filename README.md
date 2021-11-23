@@ -13,3 +13,7 @@
 - Run `$ git remote remove origin`
 - Create a new repo and add the repo ssh link to remote
 - Run `$ git push origin master`
+
+# Debug
+In Chrome, go to `chrome://inspect`
+Click on the appropriate Remote Target
