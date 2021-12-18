@@ -4,7 +4,7 @@ const todoTodoItemsCreate = async (req, res) => {
   const { currentTodo } = res
 
   const todoItem = await currentTodo.createTodoItem(req.body, {
-    fields: ['name', 'checked']
+    fields: ['name', 'description', 'complete', 'deadline']
   })
 
   res.status(200).json({ todoItem })

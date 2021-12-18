@@ -30,19 +30,23 @@ export default function useTodo(id) {
   const destroyTodo = () => {
     axios({
       method: 'DELETE',
-      url: `/api/todos/${id}`
-    }).then(() => {
-      router.push('/swr-external')
+      url: `/api/todos/${id}`,
+      withCredentials: true
+    }).then((resp) => {
+      router.push('/all-lists')
     })
   }
 
   const createTodoItem = (values) => (new Promise((resolve, reject) => {
+    console.log('createTodoItem', values)
     axios({
       method: 'POST',
       url: `/api/todos/${id}/todo-items`,
       data: values,
       withCredentials: true
     }).then((resp) => {
+      console.log('createTodoItem-resp', resp)
+
       resolve()
       mutate(produce(data, (draft) => {
         draft.todo.TodoItems.push(resp.data.todoItem)

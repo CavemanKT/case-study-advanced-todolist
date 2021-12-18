@@ -1,5 +1,6 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+const Sequelize = require('sequelize')
+
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('TodoItem', {
     id: {
       autoIncrement: true,
@@ -15,8 +16,17 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING(255),
       allowNull: true
     },
+    complete: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
     deadline: {
       type: DataTypes.DATE,
+      allowNull: true
+    },
+    TodoId: {
+      type: DataTypes.INTEGER,
       allowNull: true
     }
   }, {
@@ -26,12 +36,12 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: true,
     indexes: [
       {
-        name: "TodoItems_pkey",
+        name: 'TodoItems_pkey',
         unique: true,
         fields: [
-          { name: "id" },
+          { name: 'id' }
         ]
-      },
+      }
     ]
-  });
-};
+  })
+}

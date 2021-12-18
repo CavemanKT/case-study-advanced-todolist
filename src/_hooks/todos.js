@@ -6,7 +6,9 @@ const fetcher = (url) => axios.get(url).then((res) => res.data)
 
 export default function useTodos() {
   const router = useRouter()
-  const { data, error } = useSWR('/api/todos', fetcher)
+  const { data, error } = useSWR('/api/todos', fetcher, {
+    shouldRetryOnError: false
+  })
   const createTodo = (values) => (new Promise((resolve, reject) => {
     console.log(values)
     axios({

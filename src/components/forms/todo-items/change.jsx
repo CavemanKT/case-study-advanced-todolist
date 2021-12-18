@@ -40,7 +40,7 @@ const RenderForm = ({ errors, onSubmit, isSubmitting }) => (
         type="checkbox"
         className="form-check-input"
       />
-      <label className="form-check-label" htmlFor="complete">Default checkbox</label>
+      <label className="form-check-label" htmlFor="complete">completed</label>
     </div>
 
     <div className="text-end">

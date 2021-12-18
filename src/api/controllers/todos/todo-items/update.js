@@ -4,7 +4,7 @@ const todoTodoItemsUpdate = async (req, res) => {
   const { currentTodoItem } = res
 
   await currentTodoItem.update(req.body, {
-    fields: ['name', 'checked']
+    fields: ['name', 'description', 'complete', 'deadline']
   })
   await currentTodoItem.reload()
 

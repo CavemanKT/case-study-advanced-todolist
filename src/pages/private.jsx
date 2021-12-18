@@ -8,10 +8,16 @@ function PagesPrivate() {
 
   return (
     <CompsLayout>
-      <div id="pages-private">
-        <h1>Private Page</h1>
-        <h2>{user?.name}</h2>
-        <h2>{user?.email}</h2>
+      <div id="pages-private" className="container page-container text-center mt-5">
+        <div>
+          <h1>Private Page</h1>
+        </div>
+        <div>
+          <h2>{user?.name}</h2>
+        </div>
+        <div>
+          <h2>{user?.email}</h2>
+        </div>
       </div>
     </CompsLayout>
   )

@@ -66,20 +66,35 @@ export function RenderSWRSelfShow() {
               {
                 todo?.TodoItems.map((item) => (
                   <li key={item?.id} className="list-group-item">
-                    <span className={item?.complete ? 'text-danger' : ''}>{item?.name}</span>
+                    <span className={item?.complete ? 'text-decoration-line-through' : ''}>{item?.name}</span>
                     {' '}
                     <div className="btn-group">
-                      <button
-                        className="btn btn-warning btn-sm"
-                        type="button"
-                        disabled={todoItemsIds.includes(item?.id)}
-                        onClick={() => {
-                          updateTodoItem({
-                            ...item,
-                            complete: !item?.complete
-                          })
-                        }}
-                      >Toggle</button>
+                      {item?.complete ? (
+                        <button
+                          className="btn btn-warning btn-sm"
+                          type="button"
+                          disabled={todoItemsIds.includes(item?.id)}
+                          onClick={() => {
+                            updateTodoItem({
+                              ...item,
+                              complete: !item?.complete
+                            })
+                          }}
+                        >completed</button>
+                      ) : (
+                        <button
+                          className="btn btn-warning btn-sm"
+                          type="button"
+                          disabled={todoItemsIds.includes(item?.id)}
+                          onClick={() => {
+                            updateTodoItem({
+                              ...item,
+                              complete: !item?.complete
+                            })
+                          }}
+                        >not yet complete</button>
+                      )}
+
                       <button
                         className="btn btn-primary btn-sm"
                         type="button"
