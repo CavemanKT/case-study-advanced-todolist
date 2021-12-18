@@ -10,7 +10,8 @@ function PagesPrivate() {
     <CompsLayout>
       <div id="pages-private">
         <h1>Private Page</h1>
-        <h2>{user.email}</h2>
+        <h2>{user?.name}</h2>
+        <h2>{user?.email}</h2>
       </div>
     </CompsLayout>
   )

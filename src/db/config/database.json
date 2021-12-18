@@ -1,8 +1,10 @@
 {
   "development": {
-    "database": "[your_project_name_here]_development",
+    "database": "delvify_case_study",
     "host": "localhost",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "username": "postgres",
+    "password": "12345678"
   },
   "production": {
     "protocol": "postgres",
