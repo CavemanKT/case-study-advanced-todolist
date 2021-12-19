@@ -1,9 +1,8 @@
 import nc from 'next-connect'
-
 import getCurrentTodo from '@/api/helpers/getCurrentTodo'
 
-import todoItemsCreate from '@/api/controllers/todos/todo-items/create'
+import todoItemsMultiDelete from '@/api/controllers/todos/todo-items/multi-destroy'
 
 export default nc()
   .use(getCurrentTodo)
-  .post(todoItemsCreate)
+  .delete(todoItemsMultiDelete)

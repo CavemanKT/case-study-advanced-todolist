@@ -9,8 +9,13 @@ const fetcher = (url) => axios.get(url).then((res) => res.data)
 export default function useTodo(id) {
   const router = useRouter()
   const url = id ? `/api/todos/${id}` : null
-  const { data, error, mutate } = useSWR(url, fetcher)
+  const { data, error, mutate } = useSWR(url, fetcher, {
+    shouldRetryOnError: false
+  })
+
   const [todoItemsIds, setTodoItemsIds] = useState([])
+
+  const [selected, setSelected] = useState(false)
 
   const updateTodo = (values) => (new Promise((resolve, reject) => {
     console.log(values)
@@ -106,6 +111,21 @@ export default function useTodo(id) {
     })
   }))
 
+  const apiTodoItemsMultiDelete = (arr) => (new Promise((resolve, reject) => {
+    axios({
+      method: 'DELETE',
+      url: `/api/todos/${id}/todo-items/todo-items-multi-select/${arr}`,
+      withCredentials: true
+    }).then((resp) => {
+      resolve(resp)
+      mutate()
+    }).catch((err) => {
+      reject(err)
+    }).finally(() => {
+      setSelected(false)
+    })
+  }))
+
   return {
     todo: data?.todo,
     isLoading: !error && !data,
@@ -116,6 +136,8 @@ export default function useTodo(id) {
     destroyTodo,
     createTodoItem,
     updateTodoItem,
-    destroyTodoItem
+    destroyTodoItem,
+    apiTodoItemsMultiDelete,
+    selectedFromHook: selected
   }
 }

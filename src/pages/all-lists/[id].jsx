@@ -3,6 +3,11 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { SWRConfig } from 'swr'
 
+// material UI package
+import CheckIcon from '@mui/icons-material/Check'
+import ToggleButton from '@mui/material/ToggleButton'
+import Checkbox from '@mui/material/Checkbox'
+
 import { Todo } from '@/db/models'
 
 import useTodo from '@/_hooks/todo'
@@ -15,6 +20,8 @@ import CompsModalsTodoItemsCreate from '@/components/modals/todo-items/create'
 import CompsModalsTodoItemsUpdate from '@/components/modals/todo-items/update'
 
 export function RenderSWRSelfShow() {
+  const [selected, setSelected] = useState(false)
+
   const [openTodosUpdate, setOpenTodosUpdate] = useState(false)
   const [openTodoItemsCreate, setOpenTodoItemsCreate] = useState(false)
   const [openTodoItemsUpdate, setOpenTodoItemsUpdate] = useState(false)
@@ -23,8 +30,32 @@ export function RenderSWRSelfShow() {
 
   const {
     todo, isLoading, isError, errorMessage, todoItemsIds,
-    updateTodo, destroyTodo, createTodoItem, updateTodoItem, destroyTodoItem
+    updateTodo, destroyTodo, createTodoItem, updateTodoItem, destroyTodoItem,
+    apiTodoItemsMultiDelete,
+    selectedFromHook
   } = useTodo(id)
+
+  const [checked, setChecked] = useState({})
+  const [itemIdArr, setItemIdArr] = useState([])
+
+  // multi-selection handler
+  const handleChange = (event, todoItemId) => {
+    if (event.target.checked && !itemIdArr.includes(`${todoItemId}`)) {
+      console.log(todoItemId, event.target.checked)
+      setItemIdArr([...itemIdArr, event.target.value])
+    } else {
+      console.log(todoItemId, event.target.checked)
+      setItemIdArr(itemIdArr.filter((itemId) => itemId !== event.target.value))
+    }
+    console.log(itemIdArr)
+  }
+
+  const handleMultiDelete = () => {
+    apiTodoItemsMultiDelete(itemIdArr).then(() => {
+      setSelected(selectedFromHook)
+      setItemIdArr([])
+    })
+  }
 
   if (isLoading) return <CompsLoading />
   if (isError) return <CompsError message={errorMessage} />
@@ -36,6 +67,29 @@ export function RenderSWRSelfShow() {
         </Head>
 
         <header className="text-center mb-3">
+
+          {/* multi-selection button */}
+          <div className="d-flex justify-content-start">
+            <span className="d-inline align-self-center" />
+            <ToggleButton
+              value="check"
+              selected={selected}
+              onChange={() => {
+                setSelected(!selected)
+              }}
+              className="d-inline"
+            >
+              <CheckIcon />
+              select
+            </ToggleButton>
+            {
+              selected && (
+              <button type="button" className="btn btn-danger ms-5" onClick={() => handleMultiDelete()}>Delete</button>
+              )
+            }
+          </div>
+
+          {/* todo list feature */}
           <h1>{todo?.name}</h1>
           <div className="btn-group">
             <button
@@ -66,7 +120,26 @@ export function RenderSWRSelfShow() {
               {
                 todo?.TodoItems.map((item) => (
                   <li key={item?.id} className="list-group-item">
-                    <span className={item?.complete ? 'text-decoration-line-through' : ''}>{item?.name}</span>
+                    {
+                    selected && (
+                    <Checkbox
+                      value={item?.id}
+                      onChange={() => handleChange(event, item?.id)}
+                      inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                    )
+                  }
+                    <span className={item?.complete ? 'text-decoration-line-through' : ''}>
+                      <div>
+                        title: {item?.name}
+                      </div>
+                      <div>
+                        description: {item?.description}
+                      </div>
+                      <div>
+                        deadline: {String(item?.deadline)?.split('T')[0]}
+                      </div>
+                    </span>
                     {' '}
                     <div className="btn-group">
                       {item?.complete ? (
@@ -119,6 +192,7 @@ export function RenderSWRSelfShow() {
           </section>
         </main>
 
+        {/* modals */}
         <CompsModalsTodosUpdate
           show={openTodosUpdate}
           initialValues={todo}
