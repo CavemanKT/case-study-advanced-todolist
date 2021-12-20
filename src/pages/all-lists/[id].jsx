@@ -1,7 +1,13 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { SWRConfig } from 'swr'
+
+// React bootstrap || React Component
+import Overlay from 'react-bootstrap/Overlay'
+import Popover from 'react-bootstrap/Popover'
+import Button from '@mui/material/Button'
+import { Col, Row, Form } from 'react-bootstrap'
 
 // material UI package
 import CheckIcon from '@mui/icons-material/Check'
@@ -11,6 +17,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { Todo } from '@/db/models'
 
 import useTodo from '@/_hooks/todo'
+import useTodos from '@/_hooks/todos'
 
 import Layout from '@/components/layouts/Layout'
 import CompsLoading from '@/components/Loading'
@@ -31,15 +38,20 @@ export function RenderSWRSelfShow() {
   const {
     todo, isLoading, isError, errorMessage, todoItemsIds,
     updateTodo, destroyTodo, createTodoItem, updateTodoItem, destroyTodoItem,
-    apiTodoItemsMultiDelete,
+    apiTodoItemsMultiDelete, apiUpdateItemTodoId,
     selectedFromHook
   } = useTodo(id)
+  const { todos, isLoading: isTodosLoading, isError: isTodosError, errorMessage: isTodosErrorMessage } = useTodos()
 
-  const [checked, setChecked] = useState({})
   const [itemIdArr, setItemIdArr] = useState([])
+  const [someList, setSomeList] = useState(null)
+
+  const [show, setShow] = useState(false)
+  const [target, setTarget] = useState(null)
+  const ref = useRef(null)
 
   // multi-selection handler
-  const handleChange = (event, todoItemId) => {
+  const handleMultiSelectionChange = (event, todoItemId) => {
     if (event.target.checked && !itemIdArr.includes(`${todoItemId}`)) {
       console.log(todoItemId, event.target.checked)
       setItemIdArr([...itemIdArr, event.target.value])
@@ -51,10 +63,28 @@ export function RenderSWRSelfShow() {
   }
 
   const handleMultiDelete = () => {
-    apiTodoItemsMultiDelete(itemIdArr).then(() => {
-      setSelected(selectedFromHook)
-      setItemIdArr([])
-    })
+    if (itemIdArr.length > 0) {
+      apiTodoItemsMultiDelete(itemIdArr).then(() => {
+        setSelected(selectedFromHook)
+        setItemIdArr([])
+      })
+    }
+  }
+
+  const handleSelectListToMoveItem = (event) => {
+    setShow(!show)
+    setTarget(event.target)
+  }
+
+  const handleRadioValue = (event) => {
+    console.log(event.target.checked, event.target.value)
+    setSomeList(event.target.value)
+  }
+
+  const handleConfirmMovingToAnotherList = () => {
+    if (itemIdArr.length > 0 && someList !== null) {
+      apiUpdateItemTodoId(itemIdArr, someList)
+    }
   }
 
   if (isLoading) return <CompsLoading />
@@ -84,9 +114,79 @@ export function RenderSWRSelfShow() {
             </ToggleButton>
             {
               selected && (
-              <button type="button" className="btn btn-danger ms-5" onClick={() => handleMultiDelete()}>Delete</button>
+                <>
+                  <button
+                    type="button"
+                    className="btn btn-danger ms-5"
+                    onClick={() => {
+                      handleMultiDelete()
+                      setItemIdArr([])
+                    }}
+                  >Delete
+                  </button>
+                  <div ref={ref} className="notification-section">
+
+                    <button
+                      type="button"
+                      className="btn btn-primary ms-5"
+                      onClick={() => {
+                        handleSelectListToMoveItem(event)
+                        setSomeList(null)
+                      }}
+                    >Move to another list
+                    </button>
+                    <Overlay
+                      show={show}
+                      target={target}
+                      placement="bottom"
+                      container={ref}
+                      containerPadding={20}
+                      className="notification-container"
+                    >
+                      <Popover id="popover-contained" className="pop-over-position position-absolute">
+                        <Popover.Header as="h3">
+                          Select one list
+                        </Popover.Header>
+                        <Popover.Body>
+                          <Form>
+                            <fieldset>
+                              <Form.Group as={Row} className="mb-1">
+                                <Col sm={10}>
+                                  {
+                                    todos.map((someTodoList, i) => (
+                                      <div className="m-1">
+                                        <Form.Check
+                                          label={someTodoList.name}
+                                          type="radio"
+                                          id={someTodoList.id}
+                                          name="radio"
+                                          value={`${someTodoList.id}`}
+                                          onChange={handleRadioValue}
+                                        />
+                                      </div>
+                                    ))
+                                  }
+                                </Col>
+                              </Form.Group>
+                            </fieldset>
+                          </Form>
+                          <div>
+                            <Button
+                              variant="contained"
+                              size="medium"
+                              className="mt-4"
+                              onClick={handleConfirmMovingToAnotherList}
+                            >Confirm
+                            </Button>
+                          </div>
+                        </Popover.Body>
+                      </Popover>
+                    </Overlay>
+                  </div>
+                </>
               )
             }
+
           </div>
 
           {/* todo list feature */}
@@ -124,7 +224,7 @@ export function RenderSWRSelfShow() {
                     selected && (
                     <Checkbox
                       value={item?.id}
-                      onChange={() => handleChange(event, item?.id)}
+                      onChange={() => handleMultiSelectionChange(event, item?.id)}
                       inputProps={{ 'aria-label': 'controlled' }}
                     />
                     )

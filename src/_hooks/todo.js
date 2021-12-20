@@ -126,6 +126,10 @@ export default function useTodo(id) {
     })
   }))
 
+  const apiUpdateItemTodoId = (itemIdArr, someListId) => {
+
+  }
+
   return {
     todo: data?.todo,
     isLoading: !error && !data,
@@ -138,6 +142,7 @@ export default function useTodo(id) {
     updateTodoItem,
     destroyTodoItem,
     apiTodoItemsMultiDelete,
+    apiUpdateItemTodoId,
     selectedFromHook: selected
   }
 }
