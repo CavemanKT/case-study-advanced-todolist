@@ -50,8 +50,7 @@ export default function useTodo(id) {
       data: values,
       withCredentials: true
     }).then((resp) => {
-      console.log('createTodoItem-resp', resp)
-
+      console.log('createTodoItem-resp', resp.data.todoItem.deadline)
       resolve()
       mutate(produce(data, (draft) => {
         draft.todo.TodoItems.push(resp.data.todoItem)
