@@ -1,13 +1,15 @@
 import nc from 'next-connect'
 import { TodoItem } from '@/db/models'
 
-const todoTodoItemsMultiDestroy = async (req, res) => {
-  const { itemIdArr, id } = req.query
+const todoTodoItemsMultiUpdate = async (req, res) => {
+  const { itemIdArr, id, someListId } = req.query
+  const { currentTodo } = res
+  // console.log(req, res)
   const newArr = itemIdArr.split(',')
-  console.log(newArr)
+  console.log(newArr, currentTodo, id, someListId)
 
   for (let i = 0; i < newArr.length; i++) {
-    await TodoItem.destroy({
+    await TodoItem.update({ TodoId: someListId }, {
       where: {
         id: newArr[i]
       }
@@ -21,8 +23,8 @@ const todoTodoItemsMultiDestroy = async (req, res) => {
   })
 
   console.log(todoItems)
-  res.status(204).json({ todoItems })
+  res.status(204).json()
 }
 
 export default nc()
-  .use(todoTodoItemsMultiDestroy)
+  .use(todoTodoItemsMultiUpdate)

@@ -111,10 +111,10 @@ export default function useTodo(id) {
     })
   }))
 
-  const apiTodoItemsMultiDelete = (arr) => (new Promise((resolve, reject) => {
+  const apiTodoItemsMultiDelete = (itemIdArr) => (new Promise((resolve, reject) => {
     axios({
       method: 'DELETE',
-      url: `/api/todos/${id}/todo-items/todo-items-multi-select/${arr}`,
+      url: `/api/todos/${id}/todo-items/todo-items-multi-select/${itemIdArr}/deleteItems`,
       withCredentials: true
     }).then((resp) => {
       resolve(resp)
@@ -126,9 +126,21 @@ export default function useTodo(id) {
     })
   }))
 
-  const apiUpdateItemTodoId = (itemIdArr, someListId) => {
-
-  }
+  const apiUpdateItemTodoId = (itemIdArr, someListId) => (new Promise((resolve, reject) => {
+    console.log(itemIdArr, someListId)
+    axios({
+      method: 'PUT',
+      url: `/api/todos/${id}/todo-items/todo-items-multi-select/${itemIdArr}/movingItems/${someListId}`,
+      withCredentials: true
+    }).then((resp) => {
+      resolve(resp)
+      mutate()
+    }).catch((err) => {
+      reject(err)
+    }).finally(() => {
+      setSelected(false)
+    })
+  }))
 
   return {
     todo: data?.todo,

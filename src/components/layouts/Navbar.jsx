@@ -8,6 +8,7 @@ import Button from '@mui/material/Button'
 import useUser from '@/_hooks/user'
 
 export default function CompsLayoutsNavbar() {
+  const { user } = useUser()
   const { apiLogout } = useUser()
   const router = useRouter()
   const handleLogout = () => {
@@ -24,9 +25,16 @@ export default function CompsLayoutsNavbar() {
           <Nav className="me-auto">
             <Nav.Link as={Link} href="/all-lists"><a className="nav-link">Browse lists</a></Nav.Link>
             <Nav.Link as={Link} href="/private"><a className="nav-link">Private</a></Nav.Link>
-            <Nav.Link as={Link} href="/auth/signup"><a className="nav-link">Sign up</a></Nav.Link>
-            <Nav.Link as={Link} href="/auth/login"><a className="nav-link">Login</a></Nav.Link>
-            <Button variant="outlined" className="nav-link" onClick={handleLogout}>Logout</Button>
+            {
+              !user ? (
+                <>
+                  <Nav.Link as={Link} href="/auth/signup"><a className="nav-link">Sign up</a></Nav.Link>
+                  <Nav.Link as={Link} href="/auth/login"><a className="nav-link">Login</a></Nav.Link>
+                </>
+              ) : (
+                <Button variant="outlined" className="nav-link" onClick={handleLogout}>Logout</Button>
+              )
+            }
           </Nav>
         </Navbar.Collapse>
       </Container>

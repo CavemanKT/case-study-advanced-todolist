@@ -9,7 +9,9 @@ import CompsLoading from '@/components/Loading'
 import CompsError from '@/components/Error'
 import CompsModalsTodosCreate from '@/components/modals/todos/create'
 
-export default function allLists() {
+import withPrivateRoute from '@/_hocs/withPrivateRoute'
+
+function allLists() {
   const [openTodosCreate, setTodosCreate] = useState(false)
 
   const { todos, isLoading, isError, errorMessage, createTodo } = useTodos()
@@ -60,3 +62,5 @@ export default function allLists() {
     </Layout>
   )
 }
+
+export default withPrivateRoute(allLists)

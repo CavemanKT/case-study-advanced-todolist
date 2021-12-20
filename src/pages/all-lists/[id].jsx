@@ -13,6 +13,7 @@ import { Col, Row, Form } from 'react-bootstrap'
 import CheckIcon from '@mui/icons-material/Check'
 import ToggleButton from '@mui/material/ToggleButton'
 import Checkbox from '@mui/material/Checkbox'
+import withPrivateRoute from '@/_hocs/withPrivateRoute'
 
 import { Todo } from '@/db/models'
 
@@ -26,7 +27,7 @@ import CompsModalsTodosUpdate from '@/components/modals/todos/update'
 import CompsModalsTodoItemsCreate from '@/components/modals/todo-items/create'
 import CompsModalsTodoItemsUpdate from '@/components/modals/todo-items/update'
 
-export function RenderSWRSelfShow() {
+export function CompsTodoItems() {
   const [selected, setSelected] = useState(false)
 
   const [openTodosUpdate, setOpenTodosUpdate] = useState(false)
@@ -106,6 +107,7 @@ export function RenderSWRSelfShow() {
               selected={selected}
               onChange={() => {
                 setSelected(!selected)
+                setShow(selectedFromHook)
               }}
               className="d-inline"
             >
@@ -175,7 +177,10 @@ export function RenderSWRSelfShow() {
                               variant="contained"
                               size="medium"
                               className="mt-4"
-                              onClick={handleConfirmMovingToAnotherList}
+                              onClick={() => {
+                                handleConfirmMovingToAnotherList()
+                                setShow(selectedFromHook)
+                              }}
                             >Confirm
                             </Button>
                           </div>
@@ -335,10 +340,10 @@ export function RenderSWRSelfShow() {
   )
 }
 
-export default function SWRShow({ fallback }) {
+function PageTasks({ fallback }) {
   return (
     <SWRConfig value={{ fallback }}>
-      <RenderSWRSelfShow />
+      <CompsTodoItems />
     </SWRConfig>
   )
 }
@@ -372,3 +377,5 @@ export async function getStaticProps({ params }) {
     }
   }
 }
+
+export default withPrivateRoute(PageTasks)
