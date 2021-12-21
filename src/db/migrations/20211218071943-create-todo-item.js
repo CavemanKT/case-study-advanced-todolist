@@ -21,6 +21,10 @@ module.exports = {
       deadline: {
         type: Sequelize.DATE
       },
+      overdue: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+      },
       TodoId: {
         type: Sequelize.INTEGER
       },

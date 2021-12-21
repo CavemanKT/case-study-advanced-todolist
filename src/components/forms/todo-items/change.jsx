@@ -28,7 +28,7 @@ const RenderForm = ({ errors, onSubmit, isSubmitting }) => (
       <Field
         id="deadline"
         name="deadline"
-        type="date"
+        type="datetime-local"
         className={`form-control ${errors.name && 'is-invalid'}`}
       />
       <ErrorMessage component="div" name="date" className="invalid-feedback" />

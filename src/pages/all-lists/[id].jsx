@@ -112,7 +112,7 @@ export function CompsTodoItems() {
               className="d-inline"
             >
               <CheckIcon />
-              select
+              select{String(todo.TodoItems[0].overdue)}
             </ToggleButton>
             {
               selected && (
@@ -201,23 +201,23 @@ export function CompsTodoItems() {
               className="btn btn-primary btn-sm"
               type="button"
               onClick={() => setOpenTodosUpdate(true)}
-            >Edit</button>
+            >Edit the name</button>
             <button
               className="btn btn-danger btn-sm"
               type="button"
               onClick={() => destroyTodo()}
-            >Delete</button>
+            >Delete the list</button>
           </div>
         </header>
 
         <main className="text-center">
           <section className="mb-3">
-            <h3>Todo Items</h3>
+            <h3>Tasks</h3>
             <button
               className="btn btn-success btn-sm"
               type="button"
               onClick={() => setOpenTodoItemsCreate(true)}
-            >Create Item</button>
+            >Create Task</button>
           </section>
 
           <section>
@@ -242,7 +242,7 @@ export function CompsTodoItems() {
                         description: {item?.description}
                       </div>
                       <div>
-                        deadline: {String(item?.deadline)?.split('T')[0]}
+                        deadline: {`${String(item?.deadline)?.split('T')[0]} ${String(item?.deadline)?.split('T')[1].split('+')[0]}`}
                       </div>
                     </span>
                     {' '}

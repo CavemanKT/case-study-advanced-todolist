@@ -8,6 +8,8 @@ const todoTodoItemsUpdate = async (req, res) => {
   })
   await currentTodoItem.reload()
 
+  console.log(currentTodoItem)
+
   res.status(200).json({ todoItem: currentTodoItem })
 }
 

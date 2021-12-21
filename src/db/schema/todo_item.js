@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize')
+const moment = require('moment')
 
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define('TodoItem', {
@@ -23,7 +24,15 @@ module.exports = function (sequelize, DataTypes) {
     },
     deadline: {
       type: DataTypes.DATE,
-      allowNull: true
+      allowNull: true,
+      get() {
+        return moment(this.getDataValue('deadline')).format()
+      }
+    },
+    overdue: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
     },
     TodoId: {
       type: DataTypes.INTEGER,

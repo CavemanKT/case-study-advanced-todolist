@@ -3,6 +3,7 @@ import useSWR from 'swr'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import produce from 'immer'
+import moment from 'moment'
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 
@@ -10,9 +11,10 @@ export default function useTodo(id) {
   const router = useRouter()
   const url = id ? `/api/todos/${id}` : null
   const { data, error, mutate } = useSWR(url, fetcher, {
-    shouldRetryOnError: false
+    shouldRetryOnError: false,
+    refreshInterval: 2000
   })
-
+  console.log(data.todo)
   const [todoItemsIds, setTodoItemsIds] = useState([])
 
   const [selected, setSelected] = useState(false)
@@ -50,7 +52,20 @@ export default function useTodo(id) {
       data: values,
       withCredentials: true
     }).then((resp) => {
-      console.log('createTodoItem-resp', resp.data.todoItem.deadline)
+      console.log('createTodoItem-resp', resp.data.todoItem.deadline, Date.now())
+      const { deadline } = resp.data.todoItem
+      const date = deadline.split('T')[0]
+      const dateWithoutDash = date.split('-', 3).join('')
+      console.log(dateWithoutDash)
+      const time = deadline.split('T')[1].split('+')[0]
+      console.log(time)
+      const timeWithoutColon = time.split(':', 3).join('')
+      console.log(timeWithoutColon)
+      const datetime = dateWithoutDash + timeWithoutColon
+      console.log(datetime)
+      const datetimeDifference = moment(datetime, 'YYYYMMDDhmmss').fromNow()
+      console.log(datetimeDifference)
+      // mark this place
       resolve()
       mutate(produce(data, (draft) => {
         draft.todo.TodoItems.push(resp.data.todoItem)

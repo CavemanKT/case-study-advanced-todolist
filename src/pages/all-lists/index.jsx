@@ -31,13 +31,13 @@ function allLists() {
       </Head>
       <div className="container my-3">
         <header className="text-center mb-3">
-          <h1>Todos Lists</h1>
+          <h1>Todo Lists</h1>
           <div className="btn-group">
             <button
               className="btn btn-success btn-sm"
               type="button"
               onClick={() => setTodosCreate(true)}
-            >New Todo</button>
+            >New Todo List</button>
           </div>
         </header>
 

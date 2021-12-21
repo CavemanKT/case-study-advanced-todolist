@@ -7,6 +7,7 @@ const todoTodoItemsCreate = async (req, res) => {
     fields: ['name', 'description', 'complete', 'deadline']
   })
 
+  console.log(todoItem)
   res.status(200).json({ todoItem })
 }
 
