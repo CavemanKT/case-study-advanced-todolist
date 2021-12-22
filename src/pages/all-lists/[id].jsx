@@ -13,6 +13,8 @@ import { Col, Row, Form } from 'react-bootstrap'
 import CheckIcon from '@mui/icons-material/Check'
 import ToggleButton from '@mui/material/ToggleButton'
 import Checkbox from '@mui/material/Checkbox'
+import RefreshIcon from '@mui/icons-material/Refresh'
+
 import withPrivateRoute from '@/_hocs/withPrivateRoute'
 
 import { Todo } from '@/db/models'
@@ -39,7 +41,7 @@ export function CompsTodoItems() {
   const {
     todo, isLoading, isError, errorMessage, todoItemsIds,
     updateTodo, destroyTodo, createTodoItem, updateTodoItem, destroyTodoItem,
-    apiTodoItemsMultiDelete, apiUpdateItemTodoId,
+    apiTodoItemsMultiDelete, apiUpdateItemTodoId, apiTodoItemsGet,
     selectedFromHook
   } = useTodo(id)
   const { todos, isLoading: isTodosLoading, isError: isTodosError, errorMessage: isTodosErrorMessage } = useTodos()
@@ -72,7 +74,7 @@ export function CompsTodoItems() {
     }
   }
 
-  const handleSelectListToMoveItem = (event) => {
+  const handleSelectList = (event) => {
     setShow(!show)
     setTarget(event.target)
   }
@@ -88,6 +90,11 @@ export function CompsTodoItems() {
     }
   }
 
+  const handleRefresh = () => {
+    apiTodoItemsGet()
+    console.log('refresh')
+  }
+
   if (isLoading) return <CompsLoading />
   if (isError) return <CompsError message={errorMessage} />
   return (
@@ -99,9 +106,9 @@ export function CompsTodoItems() {
 
         <header className="text-center mb-3">
 
-          {/* multi-selection button */}
-          <div className="d-flex justify-content-start">
-            <span className="d-inline align-self-center" />
+          {/* multi-selection feature */}
+          <span className="d-flex justify-content-start">
+            {/* multi-select button */}
             <ToggleButton
               value="check"
               selected={selected}
@@ -112,11 +119,16 @@ export function CompsTodoItems() {
               className="d-inline"
             >
               <CheckIcon />
-              select{String(todo.TodoItems[0].overdue)}
+              select
             </ToggleButton>
+            <Button onClick={handleRefresh}>
+              <RefreshIcon color="primary" />
+            </Button>
+
             {
               selected && (
                 <>
+                  {/* button for multi-select & delete */}
                   <button
                     type="button"
                     className="btn btn-danger ms-5"
@@ -127,16 +139,17 @@ export function CompsTodoItems() {
                   >Delete
                   </button>
                   <div ref={ref} className="notification-section">
-
+                    {/* button for multi-select & move tasks to another list */}
                     <button
                       type="button"
-                      className="btn btn-primary ms-5"
+                      className="btn btn-primary ms-5 h-100"
                       onClick={() => {
-                        handleSelectListToMoveItem(event)
+                        handleSelectList(event)
                         setSomeList(null)
                       }}
                     >Move to another list
                     </button>
+                    {/* overlay for showing choices of other lists */}
                     <Overlay
                       show={show}
                       target={target}
@@ -191,8 +204,7 @@ export function CompsTodoItems() {
                 </>
               )
             }
-
-          </div>
+          </span>
 
           {/* todo list feature */}
           <h1>{todo?.name}</h1>
@@ -241,8 +253,14 @@ export function CompsTodoItems() {
                       <div>
                         description: {item?.description}
                       </div>
-                      <div>
-                        deadline: {`${String(item?.deadline)?.split('T')[0]} ${String(item?.deadline)?.split('T')[1].split('+')[0]}`}
+                      <div className={item?.overdue ? 'overdueColorChange' : ''}>
+                        <span className={item?.overdue ? 'deadlineFont' : ''}>
+                          deadline: &nbsp; &nbsp;
+                          {`${String(item?.deadline)?.split('T')[0]} ${String(item?.deadline)?.split('T')[1].split('+')[0]}`}
+                        </span>
+                        {
+                          item?.overdue ? <span className={item?.overdue ? 'overdueColor' : ''}>&nbsp; &nbsp; overdue</span> : ''
+                        }
                       </div>
                     </span>
                     {' '}

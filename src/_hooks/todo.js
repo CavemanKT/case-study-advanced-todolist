@@ -12,9 +12,10 @@ export default function useTodo(id) {
   const url = id ? `/api/todos/${id}` : null
   const { data, error, mutate } = useSWR(url, fetcher, {
     shouldRetryOnError: false,
-    refreshInterval: 2000
+    refreshInterval: 1000,
+    revalidateOnFocus: true
   })
-  console.log(data.todo)
+  console.log(data?.todo?.TodoItems[0]?.overdue)
   const [todoItemsIds, setTodoItemsIds] = useState([])
 
   const [selected, setSelected] = useState(false)
@@ -156,6 +157,19 @@ export default function useTodo(id) {
     })
   }))
 
+  const apiTodoItemsGet = () => (new Promise((resolve, reject) => {
+    axios({
+      method: 'GET',
+      url,
+      withCredentials: true
+    }).then((resp) => {
+      resolve(resp)
+      mutate(resp.data)
+    }).catch((err) => {
+      reject(err)
+    })
+  }))
+
   return {
     todo: data?.todo,
     isLoading: !error && !data,
@@ -169,6 +183,7 @@ export default function useTodo(id) {
     destroyTodoItem,
     apiTodoItemsMultiDelete,
     apiUpdateItemTodoId,
+    apiTodoItemsGet,
     selectedFromHook: selected
   }
 }

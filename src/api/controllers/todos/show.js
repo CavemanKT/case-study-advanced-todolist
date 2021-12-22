@@ -1,49 +1,49 @@
 import nc from 'next-connect'
-
 import moment from 'moment'
 import { TodoItem } from '@/db/models'
 
-const todosShow = (req, res) => {
+const fs = require('fs')
+
+const todosShow = async (req, res) => {
   const { currentTodo } = res
 
-  console.log(currentTodo?.TodoItems[0]?.deadline, Date.now())
+  console.log('currentMoment:', Date.now())
 
   for (let i = 0; i < currentTodo.TodoItems.length; i++) {
     if (!currentTodo?.TodoItems[i]?.overdue) {
       const { deadline } = currentTodo.TodoItems[i]
       const date = deadline.split('T')[0]
       const dateWithoutDash = date.split('-', 3).join('')
-      console.log('dateWithoutDash', dateWithoutDash)
       const time = deadline.split('T')[1].split('+')[0]
-      console.log('time', time)
       const timeWithoutColon = time.split(':', 3).join('')
-      console.log('timeWithoutColon', timeWithoutColon)
       const datetime = dateWithoutDash + timeWithoutColon
-      console.log('datetime', datetime)
       const datetimeDifference = moment(datetime, 'YYYYMMDDhmmss').fromNow()
-      console.log('datetimeDifference', datetimeDifference)
       if (datetimeDifference.includes('ago')) {
-        TodoItem.update({ overdue: true }, {
-          where: {
-            id: currentTodo.TodoItems[i].id
-          }
-        })
+        if (currentTodo?.TodoItems[i].overdue === false) {
+          await TodoItem.update({ overdue: true }, {
+            where: {
+              id: currentTodo.TodoItems[i].id
+            }
+          })
+          // send email at this point
+          process.stdout.write('Send email when today meets the deadline')
+          const data = 'Here is the email template'
+          // change the file path before you test please
+          fs.writeFile('/home/caveman/Desktop/output.txt', data, (err) => {
+            if (err) throw err
+          })
+        }
       }
     } else {
       const { deadline } = currentTodo.TodoItems[i]
       const date = deadline.split('T')[0]
       const dateWithoutDash = date.split('-', 3).join('')
-      console.log('dateWithoutDash', dateWithoutDash)
       const time = deadline.split('T')[1].split('+')[0]
-      console.log('time', time)
       const timeWithoutColon = time.split(':', 3).join('')
-      console.log('timeWithoutColon', timeWithoutColon)
       const datetime = dateWithoutDash + timeWithoutColon
-      console.log('datetime', datetime)
       const datetimeDifference = moment(datetime, 'YYYYMMDDhmmss').fromNow()
-      console.log('datetimeDifference', datetimeDifference)
       if (!datetimeDifference.includes('ago')) {
-        TodoItem.update({ overdue: false }, {
+        await TodoItem.update({ overdue: false }, {
           where: {
             id: currentTodo.TodoItems[i].id
           }

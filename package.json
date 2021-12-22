@@ -20,6 +20,7 @@
     "crypto": "^1.0.1",
     "form-data": "^4.0.0",
     "formik": "^2.2.9",
+    "fs": "^0.0.1-security",
     "immer": "^9.0.6",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
