@@ -136,7 +136,7 @@ export function CompsTodoItems() {
                       handleMultiDelete()
                       setItemIdArr([])
                     }}
-                  >Delete
+                  >Delete tasks
                   </button>
                   <div ref={ref} className="notification-section">
                     {/* button for multi-select & move tasks to another list */}
@@ -233,11 +233,12 @@ export function CompsTodoItems() {
           </section>
 
           <section>
-            <ul className="list-group">
+            <div className="row row-cols-1 row-cols-md-2 g-4">
               {
                 todo?.TodoItems.map((item) => (
-                  <li key={item?.id} className="list-group-item">
-                    {
+                  <div key={item?.id} className="col">
+                    <div className="card">
+                      {
                     selected && (
                     <Checkbox
                       value={item?.id}
@@ -246,72 +247,76 @@ export function CompsTodoItems() {
                     />
                     )
                   }
-                    <span className={item?.complete ? 'text-decoration-line-through' : ''}>
-                      <div>
-                        title: {item?.name}
-                      </div>
-                      <div>
-                        description: {item?.description}
-                      </div>
-                      <div className={item?.overdue ? 'overdueColorChange' : ''}>
-                        <span className={item?.overdue ? 'deadlineFont' : ''}>
-                          deadline: &nbsp; &nbsp;
-                          {`${String(item?.deadline)?.split('T')[0]} ${String(item?.deadline)?.split('T')[1].split('+')[0]}`}
-                        </span>
-                        {
+
+                      <div className={item?.complete ? 'text-decoration-line-through card-body' : 'card-body'}>
+                        <div className="card-title">
+                          title: {item?.name}
+                        </div>
+                        <div className="card-body">
+                          <div>
+                            description: {item?.description}
+                          </div>
+                          <div className={item?.overdue ? 'overdueColorChange' : ''}>
+                            <span className={item?.overdue ? 'deadlineFont' : ''}>
+                              deadline: &nbsp; &nbsp;
+                              {`${String(item?.deadline)?.split('T')[0]} ${String(item?.deadline)?.split('T')[1].split('+')[0]}`}
+                            </span>
+                            {
                           item?.overdue ? <span className={item?.overdue ? 'overdueColor' : ''}>&nbsp; &nbsp; overdue</span> : ''
                         }
+                          </div>
+                        </div>
                       </div>
-                    </span>
-                    {' '}
-                    <div className="btn-group">
-                      {item?.complete ? (
-                        <button
-                          className="btn btn-warning btn-sm"
-                          type="button"
-                          disabled={todoItemsIds.includes(item?.id)}
-                          onClick={() => {
-                            updateTodoItem({
-                              ...item,
-                              complete: !item?.complete
-                            })
-                          }}
-                        >completed</button>
-                      ) : (
-                        <button
-                          className="btn btn-warning btn-sm"
-                          type="button"
-                          disabled={todoItemsIds.includes(item?.id)}
-                          onClick={() => {
-                            updateTodoItem({
-                              ...item,
-                              complete: !item?.complete
-                            })
-                          }}
-                        >not yet complete</button>
-                      )}
+                      {' '}
+                      <div className="btn-group">
+                        {item?.complete ? (
+                          <button
+                            className="btn btn-warning btn-sm"
+                            type="button"
+                            disabled={todoItemsIds.includes(item?.id)}
+                            onClick={() => {
+                              updateTodoItem({
+                                ...item,
+                                complete: !item?.complete
+                              })
+                            }}
+                          >completed</button>
+                        ) : (
+                          <button
+                            className="btn btn-warning btn-sm"
+                            type="button"
+                            disabled={todoItemsIds.includes(item?.id)}
+                            onClick={() => {
+                              updateTodoItem({
+                                ...item,
+                                complete: !item?.complete
+                              })
+                            }}
+                          >not yet complete</button>
+                        )}
 
-                      <button
-                        className="btn btn-primary btn-sm"
-                        type="button"
-                        onClick={() => {
-                          setSelectedTodoItem(item)
-                          setOpenTodoItemsUpdate(true)
-                        }}
-                      >Edit</button>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        type="button"
-                        disabled={todoItemsIds.includes(item?.id)}
-                        onClick={() => {
-                          destroyTodoItem(item)
-                        }}
-                      >Delete</button>
+                        <button
+                          className="btn btn-primary btn-sm"
+                          type="button"
+                          onClick={() => {
+                            setSelectedTodoItem(item)
+                            setOpenTodoItemsUpdate(true)
+                          }}
+                        >Edit</button>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          type="button"
+                          disabled={todoItemsIds.includes(item?.id)}
+                          onClick={() => {
+                            destroyTodoItem(item)
+                          }}
+                        >Delete</button>
+                      </div>
                     </div>
-                  </li>
+                  </div>
                 ))
               }
-            </ul>
+            </div>
           </section>
         </main>
 
