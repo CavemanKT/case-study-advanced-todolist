@@ -18,7 +18,7 @@ const allLists = () => {
   const { todos, isLoading, isError, errorMessage, createTodo } = useTodos()
 
   const handleCreate = (values) => {
-    createTodo(values).then((resp) => {
+    createTodo(values).then(() => {
       setTodosCreate(false)
     })
   }

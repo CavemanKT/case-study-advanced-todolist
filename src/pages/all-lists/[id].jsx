@@ -44,7 +44,7 @@ export function CompsTodoItems() {
     apiTodoItemsMultiDelete, apiUpdateItemTodoId, apiTodoItemsGet,
     selectedFromHook
   } = useTodo(id)
-  const { todos, isLoading: isTodosLoading, isError: isTodosError, errorMessage: isTodosErrorMessage } = useTodos()
+  const { todos } = useTodos()
 
   const [itemIdArr, setItemIdArr] = useState([])
   const [someList, setSomeList] = useState(null)
@@ -56,13 +56,10 @@ export function CompsTodoItems() {
   // multi-selection handler
   const handleMultiSelectionChange = (event, todoItemId) => {
     if (event.target.checked && !itemIdArr.includes(`${todoItemId}`)) {
-      console.log(todoItemId, event.target.checked)
       setItemIdArr([...itemIdArr, event.target.value])
     } else {
-      console.log(todoItemId, event.target.checked)
       setItemIdArr(itemIdArr.filter((itemId) => itemId !== event.target.value))
     }
-    console.log(itemIdArr)
   }
 
   const handleMultiDelete = () => {
@@ -80,7 +77,6 @@ export function CompsTodoItems() {
   }
 
   const handleRadioValue = (event) => {
-    console.log(event.target.checked, event.target.value)
     setSomeList(event.target.value)
   }
 
@@ -92,7 +88,6 @@ export function CompsTodoItems() {
 
   const handleRefresh = () => {
     apiTodoItemsGet()
-    console.log('refresh')
   }
 
   if (isLoading) return <CompsLoading />
