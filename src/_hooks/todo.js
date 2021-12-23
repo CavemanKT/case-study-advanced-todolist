@@ -8,7 +8,7 @@ const fetcher = (url) => axios.get(url).then((res) => res.data)
 
 export default function useTodo(id) {
   const router = useRouter()
-  const url = id ? `/api/todos/${id}` : null
+  const url = id ? `/api/todos/${id}` : String(null)
   const { data, error, mutate } = useSWR(url, fetcher, {
     shouldRetryOnError: false,
     refreshInterval: 1000,
