@@ -1,6 +1,7 @@
 # Instructions
 - under "development mode", the database is named "delvify_case_study", username is "postgres", password is "12345678"
-- in the file 'delvify-2/src/api/controllers/todos/show.js', read the comment in line 31, and change the file path in line 32  
+- in the file 'delvify-2/src/api/controllers/todos/show.js', read the comment in line 31, and change the file path in line 32
+- in the file 'delvify-2/src/api/controllers/todos/todoItems/update.js', read the comment in line 19, and change the file path in line 20
 
 # If you want to set it up in local environment
 - Run `$ npm install`
