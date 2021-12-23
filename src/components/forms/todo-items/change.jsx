@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 
-const RenderForm = ({ errors, onSubmit, isSubmitting }) => (
+const RenderForm = ({ errors, isSubmitting }) => (
   <Form>
     <div className="mb-3">
       <label htmlFor="name" className="form-label">Name</label>

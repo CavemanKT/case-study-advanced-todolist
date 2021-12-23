@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useState } from 'react'
 import Link from 'next/link'
 import Head from 'next/head'
@@ -11,11 +12,10 @@ import CompsModalsTodosCreate from '@/components/modals/todos/create'
 
 import withPrivateRoute from '@/_hocs/withPrivateRoute'
 
-function allLists() {
+const allLists = () => {
   const [openTodosCreate, setTodosCreate] = useState(false)
 
   const { todos, isLoading, isError, errorMessage, createTodo } = useTodos()
-  console.log('todos:', todos)
 
   const handleCreate = (values) => {
     createTodo(values).then((resp) => {
