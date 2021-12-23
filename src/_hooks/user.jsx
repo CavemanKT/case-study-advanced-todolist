@@ -6,7 +6,6 @@ export default function useUser() {
   const { data, error, mutate } = useSWR('/api/my/profile', fetcher)
 
   const apiSignup = (values) => (new Promise((resolve, reject) => {
-    console.log(values)
     axios({
       method: 'POST',
       url: '/api/auth/email/signup',
@@ -21,8 +20,6 @@ export default function useUser() {
   }))
 
   const apiLogin = (values) => (new Promise((resolve, reject) => {
-    console.log(values)
-
     axios({
       method: 'POST',
       url: '/api/auth/email/login',

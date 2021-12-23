@@ -3,7 +3,6 @@ import useSWR from 'swr'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import produce from 'immer'
-import moment from 'moment'
 
 const fetcher = (url) => axios.get(url).then((res) => res.data)
 
@@ -15,13 +14,11 @@ export default function useTodo(id) {
     refreshInterval: 1000,
     revalidateOnFocus: true
   })
-  console.log(data?.todo?.TodoItems[0]?.overdue)
   const [todoItemsIds, setTodoItemsIds] = useState([])
 
   const [selected, setSelected] = useState(false)
 
   const updateTodo = (values) => (new Promise((resolve, reject) => {
-    console.log(values)
     axios({
       method: 'PUT',
       url: `/api/todos/${id}`,
@@ -40,33 +37,18 @@ export default function useTodo(id) {
       method: 'DELETE',
       url: `/api/todos/${id}`,
       withCredentials: true
-    }).then((resp) => {
+    }).then(() => {
       router.push('/all-lists')
     })
   }
 
   const createTodoItem = (values) => (new Promise((resolve, reject) => {
-    console.log('createTodoItem', values)
     axios({
       method: 'POST',
       url: `/api/todos/${id}/todo-items`,
       data: values,
       withCredentials: true
     }).then((resp) => {
-      console.log('createTodoItem-resp', resp.data.todoItem.deadline, Date.now())
-      const { deadline } = resp.data.todoItem
-      const date = deadline.split('T')[0]
-      const dateWithoutDash = date.split('-', 3).join('')
-      console.log(dateWithoutDash)
-      const time = deadline.split('T')[1].split('+')[0]
-      console.log(time)
-      const timeWithoutColon = time.split(':', 3).join('')
-      console.log(timeWithoutColon)
-      const datetime = dateWithoutDash + timeWithoutColon
-      console.log(datetime)
-      const datetimeDifference = moment(datetime, 'YYYYMMDDhmmss').fromNow()
-      console.log(datetimeDifference)
-      // mark this place
       resolve()
       mutate(produce(data, (draft) => {
         draft.todo.TodoItems.push(resp.data.todoItem)
@@ -80,7 +62,6 @@ export default function useTodo(id) {
     setTodoItemsIds(produce(todoItemsIds, (draft) => {
       draft.push(values.id)
     }))
-    console.log('itemId:', values.id)
     axios({
       method: 'PUT',
       url: `/api/todos/${id}/todo-items/${values.id}`,
@@ -106,7 +87,6 @@ export default function useTodo(id) {
     setTodoItemsIds(produce(todoItemsIds, (draft) => {
       draft.push(values.id)
     }))
-    console.log('itemId:', values.id)
     axios({
       method: 'DELETE',
       url: `/api/todos/${id}/todo-items/${values.id}`
@@ -142,7 +122,6 @@ export default function useTodo(id) {
   }))
 
   const apiUpdateItemTodoId = (itemIdArr, someListId) => (new Promise((resolve, reject) => {
-    console.log(itemIdArr, someListId)
     axios({
       method: 'PUT',
       url: `/api/todos/${id}/todo-items/todo-items-multi-select/${itemIdArr}/movingItems/${someListId}`,

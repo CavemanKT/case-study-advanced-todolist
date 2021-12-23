@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
+/* eslint-disable func-names */
+module.exports = function (sequelize, DataTypes) {
   return sequelize.define('Todo', {
     id: {
       autoIncrement: true,
@@ -18,12 +18,12 @@ module.exports = function(sequelize, DataTypes) {
     timestamps: true,
     indexes: [
       {
-        name: "Todos_pkey",
+        name: 'Todos_pkey',
         unique: true,
         fields: [
-          { name: "id" },
+          { name: 'id' }
         ]
-      },
+      }
     ]
-  });
-};
+  })
+}

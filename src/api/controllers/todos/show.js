@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-console */
 import nc from 'next-connect'
 import moment from 'moment'
 import { TodoItem } from '@/db/models'

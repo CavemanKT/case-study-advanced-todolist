@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 const bcrypt = require('bcrypt')
 const { Faker } = require('fakergem')
 

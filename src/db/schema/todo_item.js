@@ -1,4 +1,4 @@
-const Sequelize = require('sequelize')
+/* eslint-disable func-names */
 const moment = require('moment')
 
 module.exports = function (sequelize, DataTypes) {

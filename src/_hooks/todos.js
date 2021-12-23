@@ -10,13 +10,11 @@ export default function useTodos() {
     shouldRetryOnError: false
   })
   const createTodo = (values) => (new Promise((resolve, reject) => {
-    console.log(values)
     axios({
       method: 'POST',
       url: '/api/todos',
       data: values
     }).then((resp) => {
-      console.log('resp.data:', resp.data)
       resolve()
       router.push(`/all-lists/${resp.data.todo.id}`)
     }).catch(() => {

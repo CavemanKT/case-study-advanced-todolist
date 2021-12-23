@@ -1,10 +1,10 @@
+/* eslint-disable no-plusplus */
 import nc from 'next-connect'
 import { TodoItem } from '@/db/models'
 
 const todoTodoItemsMultiDestroy = async (req, res) => {
   const { itemIdArr, id } = req.query
   const newArr = itemIdArr.split(',')
-  console.log(newArr)
 
   for (let i = 0; i < newArr.length; i++) {
     await TodoItem.destroy({
@@ -20,7 +20,6 @@ const todoTodoItemsMultiDestroy = async (req, res) => {
     }
   })
 
-  console.log(todoItems)
   res.status(204).json({ todoItems })
 }
 
