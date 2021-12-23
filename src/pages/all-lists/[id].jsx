@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 import { useState, useRef } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
@@ -163,7 +164,7 @@ export function CompsTodoItems() {
                               <Form.Group as={Row} className="mb-1">
                                 <Col sm={10}>
                                   {
-                                    todos.map((someTodoList, i) => (
+                                    todos.map((someTodoList) => (
                                       <div className="m-1">
                                         <Form.Check
                                           label={someTodoList.name}
