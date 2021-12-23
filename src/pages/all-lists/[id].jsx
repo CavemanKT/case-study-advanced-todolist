@@ -165,7 +165,7 @@ export function CompsTodoItems() {
                                 <Col sm={10}>
                                   {
                                     todos.map((someTodoList) => (
-                                      <div className="m-1">
+                                      <div key={someTodoList.id} className="m-1">
                                         <Form.Check
                                           label={someTodoList.name}
                                           type="radio"
