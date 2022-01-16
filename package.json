@@ -1,5 +1,5 @@
 {
-  "name": "delvify_case_study",
+  "name": "todolist-project-lv2",
   "private": true,
   "description": "todolist-project-lv2",
   "version": "1.0.0",
@@ -16,6 +16,7 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@heroku/buildpack-registry": "^1.0.1",
     "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.2.4",
     "axios": "^0.24.0",
