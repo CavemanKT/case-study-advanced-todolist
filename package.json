@@ -1,6 +1,11 @@
 {
   "name": "delvify_case_study",
   "private": true,
+  "description": "todolist-project-lv2",
+  "version": "1.0.0",
+  "engine": {
+    "node": "17.2.0"
+  },
   "scripts": {
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
